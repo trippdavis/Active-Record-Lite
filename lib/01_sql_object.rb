@@ -110,10 +110,23 @@ class SQLObject
   end
 
   def update
-    # ...
+    col_qms = self.class.columns.map{|col| "#{col} = ?" }.join(", ")
+
+    DBConnection.execute(<<-SQL, *attribute_values, attributes[:id])
+      UPDATE
+        #{self.class.table_name}
+      SET
+        #{col_qms}
+      WHERE
+        id = ?
+    SQL
   end
 
   def save
-    # ...
+    if attributes[:id].nil?
+      insert
+    else
+      update
+    end
   end
 end
