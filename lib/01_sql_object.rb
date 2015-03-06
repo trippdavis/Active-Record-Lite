@@ -12,9 +12,9 @@ class SQLObject
         #{table_name}
       LIMIT
         0
-      SQL
+    SQL
 
-      column_names.flatten.map(&:to_sym)
+    column_names.flatten.map(&:to_sym)
   end
 
   def self.finalize!
@@ -39,11 +39,24 @@ class SQLObject
   end
 
   def self.all
-    # ...
+    results = DBConnection.execute(<<-SQL)
+      SELECT
+        *
+      FROM
+        #{table_name}
+    SQL
+
+    self.parse_all(results)
   end
 
   def self.parse_all(results)
-    # ...
+    instances = []
+
+    results.each do |result|
+      instances << self.new(result)
+    end
+
+    instances
   end
 
   def self.find(id)
