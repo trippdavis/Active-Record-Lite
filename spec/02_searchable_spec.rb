@@ -19,7 +19,7 @@ describe 'Searchable' do
   it '#where searches with single criterion' do
     cats = Cat.where(name: 'Breakfast')
     cat = cats.first
-
+    p cats
     expect(cats.length).to eq(1)
     expect(cat.name).to eq('Breakfast')
   end
